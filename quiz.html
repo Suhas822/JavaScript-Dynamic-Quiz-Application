@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+
+    <style>
+        /* Add your CSS styles here */
+        /* For simplicity, you can add your CSS styles within <style> tags. */
+            body {
+                background: #d68d8d;
+            }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1 id="question"></h1>
+        <div id="options" class="options"></div>
+        <button id="next-button">Next</button>
+    </div>
+    <div id="result" class="result"></div>
+
+    <script>
+        // Define global variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Get HTML elements
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const nextButton = document.getElementById('next-button');
+        const resultElement = document.getElementById('result');
+
+        // Mock quiz data (replace with your JSON data)
+        const questions = [
+            {
+                "question": "What is the capital of France?",
+                "options": ["New York", "London", "Paris", "Dublin"],
+                "answer": "Paris"
+            },
+            {
+                "question": "Who painted the Mona Lisa?",
+                "options": ["Vincent Van Gogh", "Pablo Picasso", "Leonardo Da Vinci", "Claude Monet"],
+                "answer": "Leonardo Da Vinci"
+            }
+            // Add more questions...
+        ];
+
+        nextButton.addEventListener('click', loadNextQuestion);
+
+        loadNextQuestion();
+
+        function loadNextQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const currentQuestion = questions[currentQuestionIndex];
+                displayQuestion(currentQuestion);
+                currentQuestionIndex++;
+            } else {
+                endQuiz();
+            }
+        }
+
+        function displayQuestion(question) {
+            questionElement.textContent = question.question;
+            optionsElement.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.textContent = option;
+                optionButton.addEventListener('click', () => checkAnswer(option, question.answer));
+                optionsElement.appendChild(optionButton);
+            });
+        }
+
+        function checkAnswer(selectedOption, correctAnswer) {
+            if (selectedOption === correctAnswer) {
+                score++;
+            }
+            loadNextQuestion();
+        }
+
+        function endQuiz() {
+            // Display the user's score and a personalized message
+            questionElement.textContent = '';
+            optionsElement.innerHTML = '';
+            nextButton.style.display = 'none';
+            resultElement.textContent = `You scored ${score}/${questions.length}. Great job!`;
+        }
+    </script>
+</body>
+</html>
